@@ -10,8 +10,8 @@ import matplotlib.image as mpimg
 from time import sleep
 
 def get_time(src='46.7746416,23.6215208',
-             dest='46.76817,23.579759',
-             arrival_time='1399356000'):
+             dest='46.769667,23.589816',    # Piata Unirii
+             arrival_time='1399399200'):
     """
     Gets the travel time in seconds, from src to dest, with given arrival_time
     """
@@ -68,7 +68,7 @@ def read_points(A, B, D, n=9):
             else:
                 
                 cache[(x, y)] = get_time( '%f,%f'%(float(x),float(y)) )
-                sleep(2.5)
+                sleep(20)
                 with open('points.txt', 'a') as g:
                     g.write("%s\t%s\t%0.6f\n"%(x, y, cache[(x, y)]))
             i += 1
@@ -90,7 +90,7 @@ if __name__=='__main__':
         (46.749179,23.50137),   # A - somewhere in Floresti
         (46.73889,23.602771),   # B - south side of Cluj
         (46.803504,23.579748),  # D - north side
-        n=1000)                  # I want this many points
+        n=900)                  # I want this many points
     
     X, Y, Z = [], [], []
     
@@ -118,18 +118,19 @@ if __name__=='__main__':
     r,g,b,a = [numpy.abs(numpy.linspace (-1, 1, 10)),
                numpy.abs(numpy.linspace(0, 0, 10)),
                numpy.abs(numpy.linspace(-1, 1, 10)),
-               numpy.abs(numpy.linspace(-1, 1, 3))]
+               numpy.abs(numpy.linspace(0, 1, 3))]
     
     CM = colors.LinearSegmentedColormap.from_list('blackwhite', zip(r,g,b,a))
     
     # See the estimated duration
-    plt.contourf(xi,yi,zi,30,cmap=CM,
-                  vmax=abs(zi).max(), vmin=-abs(zi).max())
+    zi = [x/60. for x in zi]
+    plt.contourf(xi,yi,zi,30,cmap=CM)#,
+                  #vmax=numpy.max(zi), vmin=numpy.min(zi))
     plt.colorbar()
     
     # And the actual points it's based on
     plt.scatter(X, Y,marker='o',c='b',s=1,alpha=0.5, zorder=1)
     
-    plt.title('Seconds to Spyhce')
+    plt.title('Minutes to Piata Unirii')
     plt.show()
     
