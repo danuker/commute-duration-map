@@ -9,7 +9,9 @@ import matplotlib.image as mpimg
 
 from time import sleep
 
-def get_time(src='46.7746416,23.6215208', dest='46.76817,23.579759', arrival_time='1399356000'):
+def get_time(src='46.7746416,23.6215208',
+             dest='46.76817,23.579759',
+             arrival_time='1399356000'):
     """
     Gets the travel time in seconds, from src to dest, with given arrival_time
     """
@@ -64,8 +66,9 @@ def read_points(A, B, D, n=9):
             if (x, y) in cache:
                 pass
             else:
-                sleep(2.5)
+                
                 cache[(x, y)] = get_time( '%f,%f'%(float(x),float(y)) )
+                sleep(2.5)
                 with open('points.txt', 'a') as g:
                     g.write("%s\t%s\t%0.6f\n"%(x, y, cache[(x, y)]))
             i += 1
@@ -107,23 +110,25 @@ if __name__=='__main__':
     # using Wikimedia's GeoLocator)
     img=mpimg.imread('staticmap.png')
 
-    plt.imshow(img, extent=[ 23.506622, 23.690128, 46.731558,46.814797], aspect=1.333)
+    plt.imshow(img,
+               extent=[ 23.506622, 23.690128, 46.731558,46.814797],
+               aspect=1.333)
     
     # Prepare colormap
-    r,g,b,a = [numpy.abs(numpy.linspace(1, 1, 10)),
-               numpy.abs(numpy.linspace(1, 0, 10)),
+    r,g,b,a = [numpy.abs(numpy.linspace (-1, 1, 10)),
                numpy.abs(numpy.linspace(0, 0, 10)),
-               numpy.abs(numpy.linspace(-1, 1, 10))]
+               numpy.abs(numpy.linspace(-1, 1, 10)),
+               numpy.abs(numpy.linspace(-1, 1, 3))]
     
     CM = colors.LinearSegmentedColormap.from_list('blackwhite', zip(r,g,b,a))
     
     # See the estimated duration
-    plt.contourf(xi,yi,zi,30,cmap=CM, #alpha=0.8,
+    plt.contourf(xi,yi,zi,30,cmap=CM,
                   vmax=abs(zi).max(), vmin=-abs(zi).max())
     plt.colorbar()
     
     # And the actual points it's based on
-    plt.scatter(X, Y,marker='o',c='b',s=1,alpha=0.2, zorder=1)
+    plt.scatter(X, Y,marker='o',c='b',s=1,alpha=0.5, zorder=1)
     
     plt.title('Seconds to Spyhce')
     plt.show()
