@@ -68,7 +68,7 @@ def read_points(A, B, D, n=9):
             else:
                 
                 cache[(x, y)] = get_time( '%f,%f'%(float(x),float(y)) )
-                sleep(20)
+                sleep(3)
                 with open('points.txt', 'a') as g:
                     g.write("%s\t%s\t%0.6f\n"%(x, y, cache[(x, y)]))
             i += 1
